@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Malaysia Food Map</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body {
+      background: url("mapp.png") no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+    }
+
+    .map-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+    }
+
+    .flag-button {
+      position: absolute;
+      width: 100px; /* previously 60-70px */
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    .flag-button:hover {
+      transform: scale(1.1);
+    }
+
+    /* Adjusted positions if needed */
+    .penang  { top: 35%; left: 5%; }
+    .johor   { top: 75%; left: 25%; }
+    .sabah   { top: 22%; left: 80%; }
+    .sarawak { top: 60%; left: 60%; }
+  </style>
+</head>
+<body>
+
+<div class="map-container">
+  <a href="regional.html"><img src="penang.jpg" alt="Penang" class="flag-button penang"></a>
+  <a href="regional.html"><img src="johor.jpg" alt="Johor" class="flag-button johor"></a>
+  <a href="regional.html"><img src="sabah11.jpg" alt="Sabah" class="flag-button sabah"></a>
+  <a href="regional.html"><img src="sarawak.jpg" alt="Sarawak" class="flag-button sarawak"></a>
+</div>
+
+</body>
+</html>
