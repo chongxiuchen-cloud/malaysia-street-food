@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Malaysian Recipes Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #4a2c2a, #7b3f00);
+            color: #fff;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 245, 238, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        header {
+            background: linear-gradient(to right, #91615d, #7b3f00);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .tagline {
+            font-style: italic;
+            font-size: 1.2rem;
+            color: #e9c46a;
+            margin-bottom: 20px;
+        }
+
+        .cuisine-icons {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 30px;
+        }
+
+        .icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .icon:hover {
+            transform: translateY(-5px);
+        }
+
+        .icon i {
+            font-size: 2.5rem;
+            color: #e9c46a;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .icon span {
+            color: #fff;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        nav {
+            background: #724843;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: #ac5d09;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background: #e9c46a;
+            color: #3e2723;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: #e9c46a;
+            color: #3e2723;
+        }
+
+        .content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .recipe {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            position: relative;
+            color: #3e2723;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .recipe:hover {
+            transform: translateY(-5px);
+        }
+
+        .recipe-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .recipe-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 {
+            color: #7b3f00;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            min-height: 42px;
+        }
+
+        .cuisine-type {
+            display: inline-block;
+            background: #e9c46a;
+            color: #3e2723;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .ingredients {
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        h3 {
+            color: #7b3f00;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+
+        .preparation {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #e9c46a;
+        }
+
+        .info-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            color: #7b3f00;
+        }
+
+        .info-icon:hover {
+            background: #7b3f00;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .tooltip {
+            position: absolute;
+            top: 40px;
+            right: 10px;
+            background: rgba(123, 63, 0, 0.95);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            width: 200px;
+            font-size: 0.9rem;
+            display: none;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-icon:hover + .tooltip {
+            display: block;
+        }
+
+        /* NEW: Cuisine info panel */
+        .cuisine-info {
+            grid-column: 1 / -1;
+            background: linear-gradient(to right, #7b3f00, #4a2c2a);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cuisine-info h2 {
+            color: #e9c46a;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .cuisine-info p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .cuisine-info .fun-fact {
+            background: rgba(233, 196, 106, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e9c46a;
+            margin-top: 15px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #3e2723;
+            color: #e9c46a;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                border-radius: 10px;
+            }
+            
+            .content {
+                padding: 20px;
+                grid-template-columns: 1fr;
+            }
+            
+            .cuisine-icons {
+                gap: 15px;
+            }
+            
+            .icon i {
+                font-size: 2rem;
+            }
+            
+            .recipe-img {
+                height: 180px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="LOGO.png"  width="140" height="140" alt="Eat APA?" class="logo-img">
+            <h1>Simple Malaysian Recipes</h1>
+            <p class="tagline">Discover the flavors of MALAYSIAN cuisines</p>
+            <div class="cuisine-icons">
+                <div class="icon">
+                    <i class="fas fa-dragon"></i>
+                    <span>Chinese</span>
+                </div>
+                <div class="icon">
+                <i class="fas fa-mortar-pestle"></i>
+                <span>Malay</span>
+            </div>
+            <div class="icon">
+                <i class="fas fa-spa"></i>
+                <span>Indian</span>
+            </div>
+            </div>
+        </header>
+        
+        <nav>
+            <button class="nav-btn active" onclick="filterRecipes('all')">All Recipes</button>
+            <button class="nav-btn" onclick="filterRecipes('chinese')">Chinese</button>
+            <button class="nav-btn" onclick="filterRecipes('malay')">Malay</button>
+            <button class="nav-btn" onclick="filterRecipes('indian')">Indian</button>
+            <button class="nav-btn" onclick="filterRecipes('comment')"><a href="comment.html">Comment</a></button>
+        </nav>
+        
+        <div class="content">
+            <!-- Cuisine info panels (initially hidden) -->
+            <div class="cuisine-info" id="chinese-info">
+                <h2>Chinese Cuisine History</h2>
+                <p>Chinese immigrants, primarily from southern coastal provinces like Fujian, began arriving in Malaysia in the 19th century. </p>
+                <p>Malaysian Chinese cuisine evolved from the regional Chinese cooking styles of Fujian, Cantonese, Hakka, and Teochew immigrants, who adapted their food using local Malaysian ingredients and techniques.</p>
+                <div class="fun-fact">
+                    <strong>Did you know?</strong> Chopsticks were initially used for cooking, not eating, and were first used as eating utensils during the Han Dynasty (206 BCE–220 CE).
+                </div>
+            </div>
+            
+            <div class="cuisine-info" id="malay-info">
+                <h2>Malay Cuisine Heritage</h2>
+                <p>Malay cuisine reflects the multi-ethnic makeup of Malaysia, blending indigenous techniques with influences from Chinese, Indian, Thai, Javanese, and Sumatran cultures. The use of spices is central to Malay cooking, with many dishes featuring complex spice pastes (rempah).</p>
+                <p>Malaysian Malay cuisine's history began with the Malacca Sultanate in the 15th century, which established a trade hub that introduced foreign ingredients and techniques from the Middle East, India, and China, laying the foundation for Malay culinary traditions.</p>
+                <div class="fun-fact">
+                    <strong>Did you know?</strong> The word "satay" is thought to originate from the Tamil word "catai" meaning "flesh", showing the Indian influence on Malay cuisine.
+                </div>
+            </div>
+            
+            <div class="cuisine-info" id="indian-info">
+                <h2>Indian Culinary Traditions</h2>
+                <p>Indian cuisine is as diverse as its culture, with each region having its own distinctive dishes and cooking techniques. The use of spices is the heart of Indian cooking, with combinations often being closely guarded family secrets.</p>
+                <p>The first significant Indian migration to Malaysia, particularly from South India, occurred during this period, introducing new cooking methods and spices. </p>
+                <div class="fun-fact">
+                    <strong>Did you know?</strong> Chili peppers, now central to many Indian dishes, were actually introduced to India by Portuguese traders in the 16th century. Before that, black pepper was the main source of heat in Indian cooking.
+                </div>
+            </div>
+            
+            <!-- Chinese Recipe 1 -->
+            <div class="recipe" data-category="chinese">
+                <img src="BakKutTehpic.webp" alt="Bak Kut Teh" class="recipe-img">
+                <div class="info-icon">i</div>
+                <div class="tooltip">Pork rib soup cooked with Chinese herbs and spices</div>
+                <div class="recipe-content">
+                    <h2>Bak Kut Teh</h2>
+                    <span class="cuisine-type">Chinese</span>
+                    <div class="ingredients">
+                        <h3>Key Ingredients:</h3>
+                        <ul>
+                            <li>1 kg pork ribs</li>
+                            <li>8 cloves garlic, crushed</li>
+                            <li>2 tbsp light soy sauce</li>
+                            <li>3 star anise</li>
+                            <li>1 cinnamon stick</li>
+                            <li>5 cloves</li>
+                            <li>1 tsp white peppercorns</li>
+                            <li>2 liters water</li>
+                        </ul>
+                    </div>
+                    <div class="preparation">
+                        <h3>Preparation:</h3>
+                        <p>Blanch pork ribs in boiling water for 5 minutes. Rinse and place in a pot with all ingredients. Bring to a boil, then simmer for 2-3 hours until meat is tender. Serve with steamed rice and youtiao (Chinese crullers).</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chinese Recipe 2 -->
+            <div class="recipe" data-category="chinese">
+                <img src="CharKuiDiaopic.jpg" alt="Char Kway Teow" class="recipe-img">
+                <div class="info-icon">i</div>
+                <div class="tooltip">Stir-fried rice noodles with shrimp, eggs, and beansprouts</div>
+                <div class="recipe-content">
+                    <h2>Char Kway Teow</h2>
+                    <span class="cuisine-type">Chinese</span>
+                    <div class="ingredients">
+                        <h3>Key Ingredients:</h3>
+                        <ul>
+                            <li>400g flat rice noodles</li>
+                            <li>200g shrimp, peeled</li>
+                            <li>2 Chinese sausages, sliced</li>
+                            <li>2 eggs</li>
+                            <li>1 cup bean sprouts</li>
+                            <li>3 tbsp dark soy sauce</li>
+                            <li>2 tbsp light soy sauce</li>
+                            <li>3 cloves garlic, minced</li>
+                            <li>2 tbsp vegetable oil</li>
+                        </ul>
+                    </div>
+                    <div class="preparation">
+                        <h3>Preparation:</h3>
+                        <p>Heat oil in a wok over high heat. Add garlic and stir-fry until fragrant. Add shrimp and Chinese sausage, cook for 2 minutes. Push ingredients to one side, add eggs and scramble. Add noodles and sauces, stir-fry for 3 minutes. Add bean sprouts, cook for 1 more minute. Serve immediately.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chinese Recipe 3 -->
+            <div class="recipe" data-category="chinese">
+                <img src="CheeCheongFunpic.jpg" alt="Chee Cheong Fun" class="recipe-img">
+                <div class="info-icon">i</div>
+                <div class="tooltip">Steamed rice rolls served with sweet sauce and sesame seeds</div>
+                <div class="recipe-content">
+                    <h2>Chee Cheong Fun</h2>
+                    <span class="cuisine-type">Chinese</span>
+                    <div class="ingredients">
+                        <h3>Key Ingredients:</h3>
+                        <ul>
+                            <li>1 cup rice flour</li>
+                            <li>2 tbsp tapioca flour</li>
+                            <li>3 cups water</li>
+                            <li>1/2 tsp salt</li>
+                            <li>2 tbsp sweet soy sauce</li>
+                            <li>1 tbsp hoisin sauce</li>
+                            <li>1 tsp sesame oil</li>
+                            <li>Toasted sesame seeds</li>
+                        </ul>
+                    </div>
+                    <div class="preparation">
+                        <h3>Preparation:</h3>
+                        <p>Mix rice flour, tapioca flour, water and salt to make a batter. Pour a thin layer into a greased steaming tray and steam for 3-4 minutes until set. Roll up the rice sheet and cut into pieces. Mix sauces and sesame oil, drizzle over rolls. Sprinkle with sesame seeds and serve.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Malay Recipe 1 -->
+            <div class="recipe" data-category="malay">
+                <img src="nasi-lemakpic.jpg" alt="Nasi Lemak" class="recipe-img">
+                <div class="info-icon">i</div>
+                <div class="tooltip">Malaysia's national dish with coconut rice, sambal, anchovies, and peanuts</div>
+                <div class="recipe-content">
+                    <h2>Nasi Lemak</h2>
+                    <span class="cuisine-type">Malay</span>
+                    <div class="ingredients">
+                        <h3>Key Ingredients:</h3>
+                        <ul>
+                            <li>2 cups rice</li>
+                            <li>1 cup coconut milk</li>
+                            <li>2 cups water</li>
+                            <li>1 lemongrass, bruised</li>
+                            <li>2 pandan leaves, tied</li>
+                            <li>1/2 cup dried anchovies</li>
+                            <li>1/2 cup peanuts</li>
+                            <li>4 hard-boiled eggs</li>
+                            <li>1 cucumber, sliced</li>
+                            <li>Sambal (chili paste)</li>
+                        </ul>
+                    </div>
+                    <div class="preparation">
+                        <h3>Preparation:</h3>
+                        <p>Wash rice and cook with coconut milk, water, lemongrass and pandan leaves. Fry anchovies and peanuts separately until crispy. Serve rice with anchovies, peanuts, hard-boiled eggs, cucumber slices, and sambal. Traditionally wrapped in banana leaves.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Malay Recipe 2 -->
+            <div class="recipe" data-category="malay">
+                <img src="satay1.jpg" alt="Satay" class="recipe-img">
+                <div class="info-icon">i</div>
+                <div class="tooltip">Skewered and grilled meat served with peanut sauce</div>
+                <div class="recipe-content">
+                    <h2>Satay</h2>
+                    <span class="cuisine-type">Malay</span>
+                    <div class="ingredients">
+                        <h3>Key Ingredients:</h3>
+                        <ul>
+                            <li>1 kg chicken or beef, cubed</li>
+                            <li>2 tbsp turmeric powder</li>
+                            <li>1 tbsp coriander powder</li>
+                            <li>2 stalks lemongrass, white part only</li>
+                            <li>4 shallots</li>
+                            <li>3 cloves garlic</li>
+                            <li>1 inch ginger</li>
+                            <li>1 cup roasted peanuts</li>
+                            <li>2 tbsp tamarind paste</li>
+                            <li>2 tbsp sugar</li>
+                        </ul>
+                    </div>
+                    <div class="preparation">
+                        <h3>Preparation:</h3>
+                        <p>Blend lemongrass, shallots, garlic and ginger into a paste. Mix with turmeric, coriander and meat. Marinate for 2 hours. Thread onto skewers and grill until cooked. For sauce, grind peanuts and mix with tamarind, sugar and water. Cook until thickened. Serve satay with peanut sauce, rice cakes, and cucumber.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Malay Recipe 3 -->
+            <div class="recipe" data-category="malay">
+                <img src="ManokPansohpic.jpg" alt="Manok Pansoh" class="recipe-img">
+                <div class="info-icon">i</div>
+                <div class="tooltip">Bamboo chicken cooked with lemongrass and tapioca leaves</div>
+                <div class="recipe-content">
+                    <h2>Manok Pansoh</h2>
+                    <span class="cuisine-type">Malay</span>
+                    <div class="ingredients">
+                        <h3>Key Ingredients:</h3>
+                        <ul>
+                            <li>1 kg chicken, cut into pieces</li>
+                            <li>2 stalks lemongrass, bruised</li>
+                            <li>6-8 tapioca leaves</li>
+                            <li>1 inch ginger, sliced</li>
+                            <li>4 cloves garlic, crushed</li>
+                            <li>2 shallots, sliced</li>
+                            <li>1 tbsp fermented soybean paste</li>
+                            <li>1 cup water</li>
+                            <li>1 bamboo tube for cooking</li>
+                        </ul>
+                    </div>
+                    <div class="preparation">
+                        <h3>Preparation:</h3>
+                        <p>Mix all ingredients in a bowl. Stuff the mixture into a bamboo tube. Seal the opening with tapioca leaves. Cook over an open fire for 45-60 minutes, rotating occasionally. Alternatively, cook in a pot for 45 minutes. The bamboo imparts a unique flavor to the dish.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Indian Recipe 1 -->
+            <div class="recipe" data-category="indian">
+                <img src="Roti-Canai.png" alt="Roti Canai" class="recipe-img">
+                <div class="info-icon">i</div>
+                <div class="tooltip">Flaky, crispy flatbread served with curry dipping sauce</div>
+                <div class="recipe-content">
+                    <h2>Roti Canai</h2>
+                    <span class="cuisine-type">Indian</span>
+                    <div class="ingredients">
+                        <h3>Key Ingredients:</h3>
+                        <ul>
+                            <li>4 cups all-purpose flour</li>
+                            <li>1 cup water</li>
+                            <li>1/2 cup condensed milk</li>
+                            <li>1 egg</li>
+                            <li>2 tbsp ghee or butter</li>
+                            <li>1 tsp salt</li>
+                            <li>Extra ghee for folding</li>
+                        </ul>
+                    </div>
+                    <div class="preparation">
+                        <h3>Preparation:</h3>
+                        <p>Mix all ingredients to form a soft dough. Knead for 10 minutes until elastic. Divide into balls, coat with ghee, and rest for 4-6 hours. Flatten each ball, fold repeatedly to create layers, then cook on a hot griddle with ghee until golden and flaky. Serve with curry or dhal.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Indian Recipe 2 -->
+            <div class="recipe" data-category="indian">
+                <img src="Biryani-Spices-Rice.webp" alt="Biryani" class="recipe-img">
+                <div class="info-icon">i</div>
+                <div class="tooltip">Fragrant rice dish cooked with spices, meat, and herbs</div>
+                <div class="recipe-content">
+                    <h2>Biryani</h2>
+                    <span class="cuisine-type">Indian</span>
+                    <div class="ingredients">
+                        <h3>Key Ingredients:</h3>
+                        <ul>
+                            <li>2 cups basmati rice</li>
+                            <li>500g chicken or lamb, cubed</li>
+                            <li>1 cup yogurt</li>
+                            <li>2 onions, sliced</li>
+                            <li>2 tomatoes, chopped</li>
+                            <li>1 tbsp ginger-garlic paste</li>
+                            <li>Whole spices (cinnamon, cardamom, cloves)</li>
+                            <li>1 tsp saffron strands in milk</li>
+                            <li>Fresh mint and cilantro</li>
+                            <li>2 tbsp ghee</li>
+                        </ul>
+                    </div>
+                    <div class="preparation">
+                        <h3>Preparation:</h3>
+                        <p>Marinate meat in yogurt and spices for 2 hours. Parboil rice with whole spices. In a heavy pot, layer marinated meat, fried onions, herbs, and rice. Drizzle with saffron milk and ghee. Seal with lid and cook on low heat for 25-30 minutes. Let rest for 10 minutes before serving.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Indian Recipe 3 -->
+            <div class="recipe" data-category="indian">
+                <img src="grilled-tandoori-chicken.jpeg" alt="Tandoori Chicken" class="recipe-img">
+                <div class="info-icon">i</div>
+                <div class="tooltip">Chicken marinated in yogurt and spices, grilled to perfection</div>
+                <div class="recipe-content">
+                    <h2>Tandoori Chicken</h2>
+                    <span class="cuisine-type">Indian</span>
+                    <div class="ingredients">
+                        <h3>Key Ingredients:</h3>
+                        <ul>
+                            <li>1 kg chicken, cut into pieces</li>
+                            <li>1 cup yogurt</li>
+                            <li>2 tbsp ginger-garlic paste</li>
+                            <li>2 tbsp tandoori masala</li>
+                            <li>1 tbsp lemon juice</li>
+                            <li>1 tsp red chili powder</li>
+                            <li>1/2 tsp turmeric</li>
+                            <li>1 tsp garam masala</li>
+                            <li>2 tbsp mustard oil</li>
+                            <li>Salt to taste</li>
+                        </ul>
+                    </div>
+                    <div class="preparation">
+                        <h3>Preparation:</h3>
+                        <p>Make deep cuts in the chicken pieces. Mix all marinade ingredients and coat the chicken thoroughly. Refrigerate for at least 4 hours or overnight. Grill in a tandoor or oven at 200°C for 20-25 minutes, turning occasionally. Alternatively, cook on a barbecue grill. Serve with mint chutney and lemon wedges.</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="recipe" data-category="comment" >
+             
+
+
+
+
+
+
+
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 Eat APA? | Explore the diverse culinary traditions of Malaysia</p>
+        </footer>
+    </div>
+
+    <script>
+        // Recipe filtering functionality
+        function filterRecipes(category) {
+            const recipes = document.querySelectorAll('.recipe');
+            const buttons = document.querySelectorAll('.nav-btn');
+            const infoPanels = document.querySelectorAll('.cuisine-info');
+            
+            // Update active button
+            buttons.forEach(button => {
+                if (button.textContent.toLowerCase().includes(category)) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+            
+            // Show/hide recipes based on category
+            recipes.forEach(recipe => {
+                if (category === 'all' || recipe.getAttribute('data-category') === category) {
+                    recipe.style.display = 'block';
+                } else {
+                    recipe.style.display = 'none';
+                }
+            });
+            
+            // Show/hide info panels
+            infoPanels.forEach(panel => {
+                panel.style.display = 'none';
+            });
+            
+            if (category !== 'all') {
+                const infoPanel = document.getElementById(`${category}-info`);
+                if (infoPanel) {
+                    infoPanel.style.display = 'block';
+                }
+            }
+        }
+        
+        // Add some interactive effects to recipe cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const recipes = document.querySelectorAll('.recipe');
+            
+            recipes.forEach(recipe => {
+                // Add click effect
+                recipe.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

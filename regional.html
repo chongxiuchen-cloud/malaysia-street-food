@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Regional Specialities Page</title>
+  <style>
+    :root {
+      --card: #f5f5f5; /* Light Gray */
+      --chip: #E3D1E5; /* Light Purple */
+      --text: #1E1E1E; /* Dark Gray */
+      --muted: #A2A2A2; /* Muted Gray */
+      --primary: #FF5722; /* Primary color */
+      --background: #D9B49A; /* Light Coco color */
+      --shadow: rgba(0, 0, 0, 0.2); /* Background Shadow */
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; font-family: 'Roboto', sans-serif; }
+    body {
+      background: linear-gradient(135deg, #D9B49A, #F2D2B1); /* Gradient from light coco to a lighter shade */
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+    header {
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; /* Center content horizontally */
+      justify-content: center; /* Center content vertically */
+      gap: 16px;
+      position: relative;
+      background-image: url('background1.jpeg'); /* Add your image here */
+      background-size: cover;
+      background-position: center;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    /* Semi-transparent overlay for the header */
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4); /* Semi-transparent black */
+      z-index: -1; /* Ensure it stays behind the text */
+    }
+
+    h1 { 
+      margin: 0; 
+      font-weight: 800; 
+      letter-spacing: .5px; 
+      color: white; /* White text for title */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Add shadow to make text stand out */
+    }
+
+    .chips {
+      background: rgba(255, 255, 255, 0.6); /* Semi-transparent white background */
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center align the toolbar content */
+      gap: 16px;
+    }
+
+    .toolbar input[type="search"], .select {
+      padding: 12px;
+      border-radius: 25px;
+      border: 1px solid var(--accent-color);
+      font-size: 16px;
+      width: 250px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
+      text-align: center; /* Center align input and select text */
+    }
+
+    .toolbar input[type="search"]:focus, .select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(500px, 1fr)); /* Adjusted for 2 columns */
+      gap: 16px;
+      margin-top: 20px;
+      justify-items: center; /* Center grid items horizontally */
+    }
+
+    .state-card {
+      background: var(--card); 
+      border-radius: 18px; 
+      box-shadow: 0 8px 30px var(--shadow);
+      overflow: hidden; 
+      cursor: pointer; 
+      transition: transform 0.3s ease;
+    }
+
+    .state-card:hover { 
+      transform: scale(1.05); 
+    }
+
+    .state-head {
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      padding: 14px 16px;
+      background: #fff; 
+      border-bottom: 1px solid #f0e6db;
+    }
+
+    .state-title { 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+    }
+
+    .foods {
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 10px; 
+      padding: 14px 16px;
+    }
+
+    .food {
+      display: flex; 
+      gap: 12px; 
+      align-items: center; 
+      background: #fff; 
+      border: 1px solid #f2e7da;
+      border-radius: 12px; 
+      padding: 10px 12px; 
+      width: 100%; 
+      word-wrap: break-word; 
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .food:hover { 
+      transform: scale(1.05); 
+    }
+
+    .food img {
+      width: 120px; 
+      height: 90px; 
+      border-radius: 8px; 
+      object-fit: cover; 
+      flex-shrink: 0;
+    }
+
+    .food .meta { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 6px; 
+      width: 100%; 
+    }
+
+    .food .meta .name { 
+      font-weight: 700; 
+      white-space: normal; 
+      overflow: hidden; 
+      text-overflow: ellipsis; 
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed; inset: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7); display: none; justify-content: center; align-items: center;
+      z-index: 1000; transition: opacity 0.3s ease;
+    }
+
+    .modal-content {
+      background: #fff; padding: 20px; border-radius: 12px; width: 80%; max-width: 800px; text-align: center;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal img { 
+      width: 100%; border-radius: 12px; 
+    }
+
+    .modal .food-name { 
+      font-size: 26px; 
+      font-weight: bold; 
+      margin-top: 20px; 
+    }
+
+    .close-btn { 
+      background: var(--primary); 
+      color: #fff; 
+      padding: 10px 20px; 
+      border: none; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      margin-top: 20px; 
+    }
+
+    footer { 
+      color: #fff7ee; 
+      opacity: .95; 
+      text-align: center; 
+      margin-top: 28px; 
+      font-size: 12px; 
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Regional Specialities Page</h1>
+        <div class="chips" id="topChips">
+          <span class="chip">13 states • 6 foods per state</span>
+        </div>
+      </div>
+
+      <div class="toolbar" role="toolbar" aria-label="controls">
+        <input id="search" type="search" placeholder="Search dishes or states…" aria-label="Search dishes or states" />
+        <select id="stateFilter" class="select" title="Jump to a state" aria-label="Jump to a state">
+          <option value="all">All states</option>
+          <!-- State options will be populated here -->
+        </select>
+      </div>
+    </header>
+
+    <section id="grid" class="grid" aria-live="polite"></section>
+
+  </div>
+
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-name">
+      <img id="modal-img" alt="Food Image">
+      <div class="food-name" id="modal-name"></div>
+      <button class="close-btn" id="close-modal">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const DATA = [
+      { state: "Johor", foods: [
+          { name: "Laksa Johor", image: "johor1.jpg" },
+          { name: "Mee Rebus Johor", image: "johor2.jpg" },
+          { name: "Nasi Itik Salai", image: "johor3.jpg" },
+          { name: "Roti Bakar Telur Goyang", image: "johor4.jpg" },
+          { name: "Pisang Goreng Cheese", image: "johor5.jpg" },
+          { name: "Bak Kut Teh", image: "johor6.jpg" }
+        ]},
+      { state: "Penang", foods: [
+          { name: "Penang Asam Laksa", image: "penang1.jpg" },
+          { name: "Cendol", image: "penang2.jpg" },
+          { name: "Nasi Kandar", image: "penang3.jpg" },
+          { name: "Char Kway Teow", image: "penang4.jpg" },
+          { name: "Lobak", image: "penang5.jpg" },
+          { name: "Oh Chien", image: "penang6.jpg" }
+        ]},
+      { state: "Kelantan", foods: [
+          { name: "Nasi Kerabu", image: "kelantan1.jpg" },
+          { name: "Nasi Dagang", image: "kelantan2.jpg" },
+          { name: "Laksam", image: "kelantan3.jpg" },
+          { name: "Ayam Percik", image: "kelantan4.jpg" },
+          { name: "Akok", image: "kelantan5.jpg" },
+          { name: "Keropok Lekor", image: "kelantan6.jpg" }
+        ]},
+      { state: "Kedah", foods: [
+          { name: "Laksa Kedah", image: "kedah1.jpg" },
+          { name: "Cendol Pulut", image: "kedah2.jpg" },
+          { name: "Pulut Ayam", image: "kedah3.jpg" },
+          { name: "Lempeng Kelapa", image: "kedah4.jpg" },
+          { name: "Pulut Inti", image: "kedah5.jpg" },
+          { name: "Bakpau", image: "kedah6.jpg" }
+        ]},
+      { state: "Melaka", foods: [
+          { name: "Chicken Rice Balls", image: "melaka1.jpg" },
+          { name: "Nyonya Laksa", image: "melaka2.jpg" },
+          { name: "Cendol", image: "melaka3.jpg" },
+          { name: "Yong Tau Foo", image: "melaka4.jpg" },
+          { name: "Roasted Pork Rice", image: "melaka5.jpg" },
+          { name: "Nyonya Chee Cheong Fun", image: "melaka6.jpg" }
+        ]},
+      { state: "Negeri Sembilan", foods: [
+          { name: "Masak Lemak Cili Api", image: "negeri1.jpg" },
+          { name: "Sambal Tempoyak", image: "negeri2.jpg" },
+          { name: "Rendang Minang", image: "negeri3.jpg" },
+          { name: "Ayam Bakar", image: "negeri4.jpg" },
+          { name: "Soto Mee", image: "negeri5.jpg" },
+          { name: "Pisang Goreng", image: "negeri6.jpg" }
+        ]},
+      { state: "Perak", foods: [
+          { name: "Hor Fun", image: "perak1.jpg" },
+          { name: "Bean Sprout Chicken", image: "perak2.jpg" },
+          { name: "Curry Mee", image: "perak3.jpg" },
+          { name: "Roasted Pork Rice", image: "perak4.jpg" },
+          { name: "Kai See Hor Fun", image: "perak5.jpg" },
+          { name: "Apam Balik", image: "perak6.jpg" }
+        ]},
+      { state: "Perlis", foods: [
+          { name: "Ikan Bakar", image: "perlis1.jpg" },
+          { name: "Apam Balik", image: "perlis2.jpg" },
+          { name: "Mee Goreng Mamak", image: "perlis3.jpg" },
+          { name: "Laksa Perlis", image: "perlis4.jpg" },
+          { name: "Mee Sup Perlis", image: "perlis5.jpg" },
+          { name: "Satay Daging", image: "perlis6.jpg" }
+        ]},
+      { state: "Pahang", foods: [
+          { name: "Nasi Lemak Cikgu", image: "pahang1.jpg" },
+          { name: "Patin Tempoyak", image: "pahang2.jpg" },
+          { name: "Satay Temerloh", image: "pahang3.jpg" },
+          { name: "Char Koay Teow Pahang", image: "pahang4.jpg" },
+          { name: "Ayam Masak Merah", image: "pahang5.jpg" },
+          { name: "Otak-Otak Pahang", image: "pahang6.jpg" }
+        ]},
+      { state: "Sabah", foods: [
+          { name: "Ngiu Chap", image: "sabah1.jpg" },
+          { name: "Tuaran Mee", image: "sabah2.jpg" },
+          { name: "Char Kway Teow (Sabah)", image: "sabah3.jpg" },
+          { name: "Coconut Pudding", image: "sabah4.jpg" },
+          { name: "Roti Cobra", image: "sabah5.jpg" },
+          { name: "Sabah Laksa", image: "sabah6.jpg" }
+        ]},
+      { state: "Sarawak", foods: [
+          { name: "Sarawak Laksa", image: "sarawak1.jpg" },
+          { name: "Kolo Mee", image: "sarawak2.jpg" },
+          { name: "Manok Pansoh", image: "sarawak3.jpg" },
+          { name: "Kek Lapis", image: "sarawak4.jpg" },
+          { name: "Terubok Salted Fish", image: "sarawak5.jpg" },
+          { name: "Traditional Taro Cake", image: "sarawak6.jpg" }
+        ]},
+      { state: "Selangor", foods: [
+          { name: "Nasi Lemak", image: "selangor1.jpg" },
+          { name: "Roti Canai", image: "selangor2.jpg" },
+          { name: "Satay", image: "selangor3.jpg" },
+          { name: "Wantan Mee", image: "selangor4.jpg" },
+          { name: "Chee Cheong Fun", image: "selangor5.jpg" },
+          { name: "Hokkien Mee", image: "selangor6.jpg" }
+        ]},
+      { state: "Terengganu", foods: [
+          { name: "Keropok Lekor", image: "terengganu1.jpg" },
+          { name: "Nasi Minyak", image: "terengganu2.jpg" },
+          { name: "Pulut Lepa", image: "terengganu3.jpg" },
+          { name: "Terengganu Laksa", image: "terengganu4.jpg" },
+          { name: "Nasi Berlauk", image: "terengganu5.jpg" },
+          { name: "Kampung Chicken Rice", image: "terengganu6.jpg" }
+        ]}
+    ];
+
+    const el = s => document.querySelector(s);
+
+    function buildStateOptions() {
+      const sel = el('#stateFilter');
+      const states = DATA.map(d => d.state).sort((a,b) => a.localeCompare(b));
+      states.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name; opt.textContent = name; sel.appendChild(opt);
+      });
+    }
+
+    function makeFoodItem(food) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'food';
+      wrapper.onclick = function () { openModal(food); };
+
+      const img = document.createElement('img');
+      img.src = food.image || 'images/placeholder.jpg';
+      img.alt = food.name;
+      img.onerror = function () { this.src = 'images/placeholder.jpg'; };
+
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      const name = document.createElement('div');
+      name.className = 'name';
+      name.textContent = food.name;
+
+      meta.appendChild(name);
+
+      wrapper.appendChild(img);
+      wrapper.appendChild(meta);
+
+      return wrapper;
+    }
+
+    function makeStateCard(stateObj) {
+      const { state, foods } = stateObj;
+      const card = document.createElement('article');
+      card.className = 'state-card';
+
+      card.innerHTML = `
+        <div class="state-head">
+          <div class="state-title">
+            <h2 style="margin:0;font-size:18px">${state}</h2>
+          </div>
+        </div>
+        <div class="foods"></div>
+      `;
+
+      const foodsWrap = card.querySelector('.foods');
+      foods.forEach(f => foodsWrap.appendChild(makeFoodItem(f)));
+
+      return card;
+    }
+
+    function renderGrid(state = 'all', searchQuery = '') {
+      const grid = el('#grid');
+      grid.innerHTML = '';
+
+      let filteredData = DATA.filter(d => state === 'all' || d.state === state);
+
+      if (searchQuery) {
+        filteredData = filteredData.filter(d =>
+          d.foods.some(food => food.name.toLowerCase().includes(searchQuery.toLowerCase()))
+        );
+      }
+
+      filteredData.forEach(state => grid.appendChild(makeStateCard(state)));
+    }
+
+    function openModal(food) {
+      el('#modal').style.display = 'flex';
+      el('#modal').setAttribute('aria-hidden', 'false');
+      el('#modal-img').src = food.image || 'images/placeholder.jpg';
+      el('#modal-name').textContent = food.name || '';
+    }
+
+    el('#close-modal').onclick = function() {
+      el('#modal').style.display = 'none';
+      el('#modal').setAttribute('aria-hidden', 'true');
+    };
+
+    el('#stateFilter').addEventListener('change', (e) => {
+      const searchQuery = el('#search').value;
+      renderGrid(e.target.value, searchQuery);
+    });
+
+    el('#search').addEventListener('input', (e) => {
+      const searchQuery = e.target.value;
+      const state = el('#stateFilter').value;
+      renderGrid(state, searchQuery);
+    });
+
+    buildStateOptions();
+    renderGrid();  // Initialize with all states
+  </script>
+</body>
+</html>
