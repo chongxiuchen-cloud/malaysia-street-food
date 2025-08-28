@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Street Food Guide</title>
+  <style>
+    :root {
+      --primary-color: #FF5722;
+      --accent-color: #E3D1E5;
+      --background-color: #D1C0B8; /* Cocoa Gradient */
+      --text-color: #333; /* Black text for food names, halal status, and title */
+      --muted-color: #A2A2A2;
+      --shadow-color: rgba(0, 0, 0, 0.2);
+      --border-radius: 12px;
+      --font-family: 'Roboto', sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; font-family: var(--font-family); }
+    
+    body {
+      background: linear-gradient(135deg, #D1C0B8, #F2D2B1); /* Cocoa gradient background */
+      color: var(--text-color);
+      -webkit-font-smoothing: antialiased;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px;
+    }
+
+    header {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center align the content */
+      gap: 16px;
+      background-image: url('background.jpg'); /* Local image in the images folder */
+      background-size: cover;
+      background-position: center;
+      padding: 24px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 12px var(--shadow-color);
+      text-align: center; /* Center text */
+    }
+
+    /* Add a semi-transparent overlay */
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4); /* Semi-transparent black */
+      border-radius: var(--border-radius);
+      z-index: -1; /* Ensure the overlay is below the text */
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 36px;
+      font-weight: 700;
+      color: white; /* White text for the title */
+      letter-spacing: 1px;
+      text-align: center; /* Center align the title */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Adding text shadow to improve readability */
+    }
+
+    .chips {
+      background: rgba(255, 255, 255, 0.6); /* Semi-transparent white background */
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-color);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center align the toolbar content */
+      gap: 16px;
+    }
+
+    .toolbar input[type="search"], .select {
+      padding: 12px;
+      border-radius: 25px;
+      border: 1px solid var(--accent-color);
+      font-size: 16px;
+      width: 250px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
+    }
+
+    .toolbar input[type="search"]:focus, .select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 30px;
+    }
+
+    .food {
+      background: #fff;
+      border-radius: var(--border-radius);
+      box-shadow: 0 6px 12px var(--shadow-color);
+      padding: 20px;
+      height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .food:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 20px var(--shadow-color);
+    }
+
+    .food img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .food .meta {
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .food .meta .name {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-color); /* Black color for food names */
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .food .meta .halal-status {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-color); /* Black color for halal status */
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 30px;
+      border-radius: var(--border-radius);
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+      box-shadow: 0 0 20px var(--shadow-color);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .modal .food-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-color); /* Black color for food name in modal */
+      margin-top: 15px;
+    }
+
+    .modal .description, .modal .ingredients, .modal .halal-status {
+      font-size: 16px;
+      color: var(--muted-color);
+      margin-top: 15px;
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    .close-btn {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 10px 20px;
+      border-radius: var(--border-radius);
+      border: none;
+      cursor: pointer;
+      margin-top: 15px;
+      font-size: 16px;
+    }
+
+    footer {
+      color: var(--accent-color);
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14px;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      }
+
+      .food img {
+        height: 160px;
+      }
+
+      .modal img {
+        max-height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Street Food Guide</h1>
+        <div class="chips" id="topChips">
+          <span class="chip">13 States • 6 Foods per State</span>
+        </div>
+      </div>
+
+      <div class="toolbar" role="toolbar" aria-label="controls">
+        <input id="search" type="search" placeholder="Search dishes or states..." aria-label="Search dishes or states" />
+        <select id="stateFilter" class="select" title="Jump to a state" aria-label="Jump to a state">
+          <option value="all">All States</option>
+        </select>
+        <select id="halalFilter" class="select" title="Filter halal or non-halal" aria-label="Filter halal or non-halal">
+          <option value="all">All Foods</option>
+          <option value="halal">Halal</option>
+          <option value="non-halal">Non-Halal</option>
+        </select>
+      </div>
+    </header>
+
+    <section id="grid" class="grid" aria-live="polite"></section>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-name">
+      <img id="modal-img" alt="Food Image">
+      <div class="food-name" id="modal-name"></div>
+      <div class="description" id="modal-description"></div>
+      <div class="ingredients" id="modal-ingredients"></div>
+      <div class="halal-status" id="modal-halal-status"></div>
+      <button class="close-btn" id="close-modal">Close</button>
+    </div>
+  </div>
+
+  <script>
+      const DATA = [
+  // Johor
+  { name: "Laksa Johor", state: "Johor", image: "johor1.jpg", halal: "non-halal", description: "A rich noodle dish using spaghetti-style noodles with a mackerel-based gravy perfumed with lemongrass and torch ginger.", ingredients: "Mackerel, Tamarind, Spaghetti/Rice Noodles, Torch Ginger, Lemongrass, Coconut, Chili" },
+  { name: "Mee Rebus Johor", state: "Johor", image: "johor2.jpg", halal: "halal", description: "Yellow noodles bathed in a thick sweet–savory gravy, topped with egg, tofu and green chilies.", ingredients: "Yellow Noodles, Sweet Potato, Dried Shrimp, Tofu, Eggs, Fried Shallots, Chilies" },
+  { name: "Nasi Itik Salai", state: "Johor", image: "johor3.jpg", halal: "non-halal", description: "Smoked duck served with steamed rice and ulam herbs for a fragrant, smoky meal.", ingredients: "Duck, Turmeric, Galangal, Lemongrass, Rice, Ulam Herbs, Sambal" },
+  { name: "Roti Bakar Telur Goyang", state: "Johor", image: "johor4.jpg", halal: "halal", description: "Charcoal-grilled toast with butter and soft-set eggs, best with a splash of soy sauce.", ingredients: "Bread, Eggs, Butter, Soy Sauce, White Pepper" },
+  { name: "Pisang Goreng Cheese", state: "Johor", image: "johor5.jpg", halal: "halal", description: "Crisp fried banana fritters showered with grated cheese and sweet drizzle.", ingredients: "Bananas, Flour, Baking Powder, Sugar, Grated Cheese, Oil" },
+  { name: "Bak Kut Teh", state: "Johor", image: "johor6.jpg", halal: "non-halal", description: "Herbal pork rib soup simmered with Chinese herbs and garlic, typically eaten with rice and youtiao.", ingredients: "Pork Ribs, Dang Gui, Star Anise, Garlic, Soy Sauce, Pepper, Rice" },
+
+  // Penang
+  { name: "Penang Asam Laksa", state: "Penang", image: "penang1.jpg", halal: "halal", description: "Tamarind-sour fish broth with thick rice noodles and herbs; iconic Penang street food.", ingredients: "Mackerel, Tamarind, Rice Noodles, Torch Ginger, Mint, Cucumber, Pineapple, Chili Paste" },
+  { name: "Cendol", state: "Penang", image: "penang2.jpg", halal: "halal", description: "Icy dessert of coconut milk, palm sugar syrup and green rice-jelly strands.", ingredients: "Coconut Milk, Gula Melaka, Pandan Jelly, Shaved Ice, Red Beans" },
+  { name: "Nasi Kandar", state: "Penang", image: "penang3.jpg", halal: "halal", description: "Steamed rice 'flooded' with assorted curries and sides reflecting Indian Muslim heritage.", ingredients: "Rice, Curry Gravies, Fried Chicken, Beef/ Mutton, Fish, Okra, Eggs" },
+  { name: "Char Kway Teow", state: "Penang", image: "penang4.jpg", halal: "halal", description: "Wok-fried flat noodles with prawns and eggs, smoky from high-heat 'wok hei'.", ingredients: "Flat Rice Noodles, Prawns, Eggs, Chinese Chives, Bean Sprouts, Dark Soy, Lard/Oil" },
+  { name: "Lobak", state: "Penang", image: "penang5.jpg", halal: "halal", description: "Seasoned minced meat wrapped in tofu skin and deep-fried, served with dips.", ingredients: "Minced Pork/Chicken, Five-Spice, Tofu Skin, Garlic, Egg, Flour, Chili Sauce" },
+  { name: "Oh Chien", state: "Penang", image: "penang6.jpg", halal: "non-halal", description: "Starchy-crispy oyster omelette with a spicy chili dip.", ingredients: "Oysters, Eggs, Tapioca Starch, Garlic, Chives, Chili Sauce" },
+
+  // Kelantan
+  { name: "Nasi Kerabu", state: "Kelantan", image: "kelantan1.jpg", halal: "halal", description: "Blue-tinted herb rice served with raw salads, salted egg and spicy coconut gravy.", ingredients: "Butterfly Pea Rice, Ulam Herbs, Kerisik, Sambal Tumis, Salted Egg, Fried Fish/Chicken" },
+  { name: "Nasi Dagang", state: "Kelantan", image: "kelantan2.jpg", halal: "halal", description: "Fragrant steamed rice mix with coconut and fenugreek, paired with tuna curry.", ingredients: "Brown/White Rice, Coconut Milk, Fenugreek, Gulai Ikan Tongkol, Pickles" },
+  { name: "Laksam", state: "Kelantan", image: "kelantan3.jpg", halal: "halal", description: "Rolled rice noodle sheets in a creamy fish gravy, finished with fresh herbs.", ingredients: "Rice Flour Sheets, Mackerel, Coconut Milk, Galangal, Lemongrass, Herbs, Chili" },
+  { name: "Ayam Percik", state: "Kelantan", image: "kelantan4.jpg", halal: "halal", description: "Grilled chicken basted with spiced coconut gravy until lightly charred.", ingredients: "Chicken, Coconut Milk, Lemongrass, Chili, Turmeric, Tamarind, Palm Sugar" },
+  { name: "Akok", state: "Kelantan", image: "kelantan5.jpg", halal: "halal", description: "Caramelized custard-like kuih that's soft, eggy and fragrant.", ingredients: "Eggs, Coconut Milk, Gula Melaka, Flour, Pandan" },
+  { name: "Keropok Lekor", state: "Kelantan", image: "kelantan6.jpg", halal: "halal", description: "Chewy fish sausages sliced and fried; crisp outside, soft inside.", ingredients: "Fish Paste, Sago Flour, Salt, Sugar, Oil, Chili Sauce" },
+
+  // Kedah
+  { name: "Laksa Kedah", state: "Kedah", image: "kedah1.jpg", halal: "halal", description: "Homey fish-based laksa with a lighter, herbal broth and thin rice noodles.", ingredients: "Mackerel, Tamarind, Rice Noodles, Torch Ginger, Mint, Cucumber, Chili" },
+  { name: "Cendol Pulut", state: "Kedah", image: "kedah2.jpg", halal: "halal", description: "Cendol bolstered with glutinous rice for extra chew and richness.", ingredients: "Coconut Milk, Gula Melaka, Pandan Jelly, Shaved Ice, Glutinous Rice" },
+  { name: "Pulut Ayam", state: "Kedah", image: "kedah3.jpg", halal: "halal", description: "Savory glutinous rice topped with fried chicken and sambal.", ingredients: "Glutinous Rice, Coconut Milk, Fried Chicken, Sambal, Cucumber" },
+  { name: "Lempeng Kelapa", state: "Kedah", image: "kedah4.jpg", halal: "halal", description: "Thin coconut pancakes griddled till fragrant, great with gula melaka.", ingredients: "Grated Coconut, Flour, Water, Salt, Gula Melaka" },
+  { name: "Pulut Inti", state: "Kedah", image: "kedah5.jpg", halal: "halal", description: "Banana-leaf parcels of sticky rice crowned with sweet coconut topping.", ingredients: "Glutinous Rice, Coconut Milk, Grated Coconut, Palm Sugar, Banana Leaf" },
+  { name: "Bakpau", state: "Kedah", image: "kedah6.jpg", halal: "non-halal", description: "Soft steamed buns with sweet or savory fillings popular at night markets.", ingredients: "Flour, Yeast, Sugar, Milk/Water, Char Siu/Red Bean/Chicken Filling" },
+
+  // Melaka
+  { name: "Chicken Rice Balls", state: "Melaka", image: "melaka1.jpg", halal: "halal", description: "Hainanese-style rice pressed into bite-sized balls, served with roast/poached chicken.", ingredients: "Chicken, Chicken Fat Rice, Ginger, Garlic, Soy Sauce, Chili Dip" },
+  { name: "Nyonya Laksa", state: "Melaka", image: "melaka2.jpg", halal: "halal", description: "Peranakan coconut curry laksa—aromatic, creamy and gently spicy.", ingredients: "Coconut Milk, Dried Shrimp, Laksa Noodles, Tofu Puffs, Fish Cake, Sambal" },
+  { name: "Cendol", state: "Melaka", image: "melaka3.jpg", halal: "halal", description: "Melaka-famous cendol with thick palm sugar syrup and creamy coconut milk.", ingredients: "Coconut Milk, Gula Melaka, Pandan Jelly, Shaved Ice, Red Beans" },
+  { name: "Yong Tau Foo", state: "Melaka", image: "melaka4.jpg", halal: "halal", description: "Assorted vegetables and tofu stuffed with fish paste in clear or curry soup.", ingredients: "Fish Paste, Tofu, Bitter Gourd, Eggplant, Chili, Broth, Noodles (optional)" },
+  { name: "Roasted Pork Rice", state: "Melaka", image: "melaka5.jpg", halal: "non-halal", description: "Crispy-skinned roast pork sliced over rice with tangy chili dip.", ingredients: "Pork Belly, Five-Spice, Salt, Rice, Cucumber, Chili Sauce" },
+  { name: "Nyonya Chee Cheong Fun", state: "Melaka", image: "melaka6.jpg", halal: "halal", description: "Silky rice rolls with sweet-savoury sauces and sesame finish.", ingredients: "Rice Rolls, Hae Ko (shrimp paste sauce), Sweet Sauce, Chili, Sesame Seeds" },
+
+  // Negeri Sembilan
+  { name: "Masak Lemak Cili Api", state: "Negeri Sembilan", image: "negeri1.jpg", halal: "halal", description: "Fiery yellow coconut curry flavored with bird's eye chilies and turmeric.", ingredients: "Coconut Milk, Bird's Eye Chilies, Turmeric, Lemongrass, Chicken/Beef, Vegetables" },
+  { name: "Sambal Tempoyak", state: "Negeri Sembilan", image: "negeri2.jpg", halal: "halal", description: "Fermented durian sambal—pungent, creamy and spicy, served with rice.", ingredients: "Tempoyak (Fermented Durian), Chilies, Shallots, Turmeric Leaf, Sugar, Salt" },
+  { name: "Rendang Minang", state: "Negeri Sembilan", image: "negeri3.jpg", halal: "halal", description: "Dry-style rendang slowly cooked in coconut and spices until caramelized.", ingredients: "Beef, Coconut Milk, Kerisik, Galangal, Lemongrass, Turmeric, Chilies" },
+  { name: "Ayam Bakar", state: "Negeri Sembilan", image: "negeri4.jpg", halal: "halal", description: "Marinated chicken grilled till smoky and char-edged, served with sambal.", ingredients: "Chicken, Turmeric, Coriander, Lemongrass, Garlic, Sambal" },
+  { name: "Soto Mee", state: "Negeri Sembilan", image: "negeri5.jpg", halal: "halal", description: "Clear spiced chicken broth with noodles, begedil and shredded meat.", ingredients: "Chicken Stock, Yellow Noodles, Begedil, Bean Sprouts, Fried Shallots, Chili" },
+  { name: "Pisang Goreng", state: "Negeri Sembilan", image: "negeri6.jpg", halal: "halal", description: "Batter-fried bananas that are crisp outside and tender within.", ingredients: "Bananas, Flour, Rice Flour, Baking Powder, Sugar, Oil" },
+
+  // Perak
+  { name: "Hor Fun", state: "Perak", image: "perak1.jpg", halal: "halal", description: "Ipoh flat rice noodles in silky soup or wok-fried with gravy.", ingredients: "Flat Rice Noodles, Chicken Stock, Prawns/Chicken, Chives, Soy Sauce, Starch" },
+  { name: "Bean Sprout Chicken", state: "Perak", image: "perak2.jpg", halal: "halal", description: "Poached chicken with crunchy, short Ipoh bean sprouts and soy dressing.", ingredients: "Chicken, Bean Sprouts, Soy Sauce, Sesame Oil, Scallions, Ginger" },
+  { name: "Curry Mee", state: "Perak", image: "perak3.jpg", halal: "halal", description: "Fragrant curry noodle soup with tofu puffs and seafood or chicken.", ingredients: "Coconut Milk, Curry Paste, Yellow/Rice Noodles, Tofu Puffs, Cockles, Chicken" },
+  { name: "Roasted Pork Rice", state: "Perak", image: "perak4.jpg", halal: "non-halal", description: "Charred, crackly roast pork over steamed rice with chili dip.", ingredients: "Pork Belly, Spices, Rice, Cucumber, Chili-Garlic Sauce" },
+  { name: "Kai See Hor Fun", state: "Perak", image: "perak5.jpg", halal: "halal", description: "Shredded-chicken flat noodles in delicate prawn-chicken broth.", ingredients: "Flat Rice Noodles, Chicken, Prawn Shell Stock, Chives, Fried Shallots" },
+  { name: "Apam Balik", state: "Perak", image: "perak6.jpg", halal: "halal", description: "Thick turnover pancake with nutty-sweet filling, crisp at the edges.", ingredients: "Flour, Eggs, Sugar, Baking Soda, Peanuts, Sweet Corn, Margarine" },
+
+  // Perlis
+  { name: "Ikan Bakar", state: "Perlis", image: "perlis1.jpg", halal: "halal", description: "Charcoal-grilled fish brushed with spicy paste, served with air asam.", ingredients: "Whole Fish, Chili Paste, Turmeric, Lemongrass, Tamarind Dip, Lime" },
+  { name: "Apam Balik", state: "Perlis", image: "perlis2.jpg", halal: "halal", description: "Street-favorite peanut pancake folded with buttery sweetness.", ingredients: "Flour, Eggs, Sugar, Peanuts, Corn, Margarine" },
+  { name: "Mee Goreng Mamak", state: "Perlis", image: "perlis3.jpg", halal: "halal", description: "Indian-Muslim style wok-fried noodles—tangy, spicy and slightly sweet.", ingredients: "Yellow Noodles, Tomato Sauce, Soy Sauce, Chili, Tofu, Potato, Egg" },
+  { name: "Laksa Perlis", state: "Perlis", image: "perlis4.jpg", halal: "halal", description: "Local laksa with lighter fish gravy and fresh herbs.", ingredients: "Mackerel, Tamarind, Rice Noodles, Herbs, Cucumber, Chili" },
+  { name: "Mee Sup Perlis", state: "Perlis", image: "perlis5.jpg", halal: "halal", description: "Clear beef or chicken noodle soup with aromatic spices.", ingredients: "Beef/Chicken, Stock, Yellow Noodles, Fried Shallots, Scallions, White Pepper" },
+  { name: "Satay Daging", state: "Perlis", image: "perlis6.jpg", halal: "halal", description: "Beef skewers marinated and grilled, served with peanut sauce.", ingredients: "Beef, Turmeric, Coriander, Cumin, Sugar, Peanut Sauce, Rice Cakes" },
+
+  // Pahang
+  { name: "Nasi Lemak Cikgu", state: "Pahang", image: "pahang1.jpg", halal: "halal", description: "Fragrant coconut rice with spicy sambal and classic garnishes.", ingredients: "Rice, Coconut Milk, Pandan, Sambal, Anchovies, Peanuts, Egg, Cucumber" },
+  { name: "Patin Tempoyak", state: "Pahang", image: "pahang2.jpg", halal: "halal", description: "Catfish simmered in fermented durian gravy—creamy, tangy and spicy.", ingredients: "Patin (Catfish), Tempoyak, Turmeric, Chilies, Lemongrass, Kaffir Lime Leaf" },
+  { name: "Satay Temerloh", state: "Pahang", image: "pahang3.jpg", halal: "halal", description: "Juicy skewers from Temerloh, charcoal-grilled with smoky edges.", ingredients: "Chicken/Beef, Turmeric, Lemongrass, Sugar, Cumin, Peanut Sauce, Ketupat" },
+  { name: "Char Koay Teow Pahang", state: "Pahang", image: "pahang4.jpg", halal: "halal", description: "Local spin on wok-fried flat noodles with seafood and chives.", ingredients: "Flat Rice Noodles, Prawns, Fish Cake, Eggs, Bean Sprouts, Dark Soy" },
+  { name: "Ayam Masak Merah", state: "Pahang", image: "pahang5.jpg", halal: "halal", description: "Tomato-chili braised chicken that's rich, mildly sweet and spicy.", ingredients: "Chicken, Chili Paste, Tomato Sauce, Coconut Milk, Cinnamon, Cloves" },
+  { name: "Otak-Otak Pahang", state: "Pahang", image: "pahang6.jpg", halal: "halal", description: "Banana-leaf grilled fish mousse perfumed with coconut and spices.", ingredients: "Fish, Coconut Milk, Chili Paste, Turmeric, Lemongrass, Banana Leaf" },
+
+  // Sabah
+  { name: "Ngiu Chap", state: "Sabah", image: "sabah1.jpg", halal: "halal", description: "Mixed beef parts in hearty broth with noodles and leafy greens.", ingredients: "Beef Cuts, Beef Stock, Yellow/Rice Noodles, Garlic Oil, Greens, Chili" },
+  { name: "Tuaran Mee", state: "Sabah", image: "sabah2.jpg", halal: "halal", description: "Springy egg noodles wok-fried till lightly scorched and aromatic.", ingredients: "Egg Noodles, Eggs, Char Siu/Seafood, Chives, Soy Sauce" },
+  { name: "Char Kway Teow (Sabah)", state: "Sabah", image: "sabah3.jpg", halal: "halal", description: "Sabah-style flat noodle stir-fry with seafood and beansprouts.", ingredients: "Flat Rice Noodles, Prawns, Fish Cake, Eggs, Bean Sprouts, Dark Soy" },
+  { name: "Coconut Pudding", state: "Sabah", image: "sabah4.jpg", halal: "halal", description: "Silky chilled coconut dessert set to a soft wobble.", ingredients: "Coconut Water, Coconut Milk, Sugar, Agar-Agar/Gelatin" },
+  { name: "Roti Cobra", state: "Sabah", image: "sabah5.jpg", halal: "halal", description: "Roti canai topped with fried egg and draped in curry gravy.", ingredients: "Roti Canai, Curry Gravy, Egg, Onions, Chilies" },
+  { name: "Sabah Laksa", state: "Sabah", image: "sabah6.jpg", halal: "halal", description: "Seafood-forward laksa with bright, tangy, spicy broth.", ingredients: "Prawns, Fish, Coconut Milk, Tamarind, Laksa Noodles, Chili Paste" },
+
+  // Sarawak
+  { name: "Sarawak Laksa", state: "Sarawak", image: "sarawak1.jpg", halal: "halal", description: "Signature laksa with a complex, peppery-spiced broth and prawns.", ingredients: "Laksa Paste, Coconut Milk, Prawns, Chicken, Rice Vermicelli, Bean Sprouts, Lime" },
+  { name: "Kolo Mee", state: "Sarawak", image: "sarawak2.jpg", halal: "non-halal", description: "Springy noodles tossed in light savory oil with minced and char siu pork.", ingredients: "Egg Noodles, Lard/Oil, Minced Pork, Char Siu, Scallions" },
+  { name: "Manok Pansoh", state: "Sarawak", image: "sarawak3.jpg", halal: "halal", description: "Chicken cooked in bamboo with herbs—smoky and delicately flavored.", ingredients: "Chicken, Lemongrass, Ginger, Garlic, Basil/Daun Bungkang, Salt" },
+  { name: "Kek Lapis", state: "Sarawak", image: "sarawak4.jpg", halal: "halal", description: "Colorful layered cake with buttery crumb and festive patterns.", ingredients: "Flour, Butter, Eggs, Sugar, Milk, Food Coloring, Spices (optional)" },
+  { name: "Terubok Salted Fish", state: "Sarawak", image: "sarawak5.jpg", halal: "halal", description: "Brined and dried terubok fish, prized for its rich flavor.", ingredients: "Terubok Fish, Salt, Oil (for frying), Lime" },
+  { name: "Traditional Taro Cake", state: "Sarawak", image: "sarawak6.jpg", halal: "halal", description: "Steamed yam cake studded with dried shrimp and shallots.", ingredients: "Taro (Yam), Rice Flour, Dried Shrimp, Shiitake, Fried Shallots, Scallions" },
+
+  // Selangor
+  { name: "Nasi Lemak", state: "Selangor", image: "selangor1.jpg", halal: "halal", description: "National-favorite coconut rice with spicy sambal and crunchy sides.", ingredients: "Rice, Coconut Milk, Pandan, Sambal, Anchovies, Peanuts, Egg, Cucumber" },
+  { name: "Roti Canai", state: "Selangor", image: "selangor2.jpg", halal: "halal", description: "Flaky griddled flatbread served with dhal or curry.", ingredients: "Flour, Ghee/Oil, Water, Salt, Dhal Curry, Fish/Chicken Curry" },
+  { name: "Satay", state: "Selangor", image: "selangor3.jpg", halal: "halal", description: "Charcoal-grilled skewers with fragrant peanut sauce and ketupat.", ingredients: "Chicken/Beef, Turmeric, Lemongrass, Sugar, Peanut Sauce, Rice Cakes, Cucumber" },
+  { name: "Wantan Mee", state: "Selangor", image: "selangor4.jpg", halal: "non-halal", description: "Springy noodles with char siu, choy sum and silky dumplings.", ingredients: "Egg Noodles, Char Siu, Choy Sum, Wantans, Soy Sauce, Lard/Oil" },
+  { name: "Chee Cheong Fun", state: "Selangor", image: "selangor5.jpg", halal: "non-halal", description: "Rice rolls with sweet sauce, sesame and optional yong tau foo.", ingredients: "Rice Rolls, Sweet Sauce, Chili, Sesame Seeds, Fried Shallots" },
+  { name: "Hokkien Mee", state: "Selangor", image: "selangor6.jpg", halal: "halal", description: "Thick dark-soy braised noodles with pork lard crunch and cabbage.", ingredients: "Thick Yellow Noodles, Dark Soy Sauce, Pork/Lardons, Cabbage, Prawns" },
+
+  // Terengganu
+  { name: "Keropok Lekor", state: "Terengganu", image: "terengganu1.jpg", halal: "halal", description: "Terengganu's famous fish crackers—boiled then fried for chew and crunch.", ingredients: "Fish Paste, Sago Flour, Salt, Sugar, Oil, Chili Dip" },
+  { name: "Nasi Minyak", state: "Terengganu", image: "terengganu2.jpg", halal: "halal", description: "Ghee-scented ceremonial rice with spices and curries.", ingredients: "Basmati/Local Rice, Ghee, Cloves, Cardamom, Cinnamon, Raisins, Curries" },
+  { name: "Pulut Lepa", state: "Terengganu", image: "terengganu3.jpg", halal: "halal", description: "Banana-leaf grilled sticky rice with spicy fish filling.", ingredients: "Glutinous Rice, Grated Coconut, Fish, Chili, Shallots, Banana Leaf" },
+  { name: "Terengganu Laksa", state: "Terengganu", image: "terengganu4.jpg", halal: "halal", description: "Silky laksa noodles with smooth fish gravy and fresh herbs.", ingredients: "Rice Noodles, Mackerel, Coconut Milk (optional), Tamarind, Herbs, Chili" },
+  { name: "Nasi Berlauk", state: "Terengganu", image: "terengganu5.jpg", halal: "halal", description: "Rice with simple gulai, fried fish and sambal—everyday favorite.", ingredients: "Rice, Gulai Curry, Fried Fish, Ulam, Sambal, Cucumber" },
+  { name: "Kampung Chicken Rice", state: "Terengganu", image: "terengganu6.jpg", halal: "halal", description: "Village-style chicken rice with clear soup and chili-ginger dip.", ingredients: "Chicken, Chicken Rice, Ginger, Garlic, Scallions, Chili-Garlic Sauce" }
+];
+    const el = s => document.querySelector(s);
+
+    function buildStateOptions() {
+      const sel = el('#stateFilter');
+      const states = Array.from(new Set(DATA.map(d => d.state))).sort();
+      states.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = name;
+        sel.appendChild(opt);
+      });
+    }
+
+    function makeFoodItem(food) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'food';
+      wrapper.onclick = function () { openModal(food); };
+
+      const img = document.createElement('img');
+      img.src = food.image || 'images/placeholder.jpg';
+      img.alt = food.name;
+
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      const name = document.createElement('div');
+      name.className = 'name';
+      name.textContent = food.name + " (" + food.state + ")";
+
+      const halalStatus = document.createElement('div');
+      halalStatus.className = 'halal-status';
+      halalStatus.textContent = `Halal: ${food.halal}`;
+
+      meta.appendChild(name);
+      meta.appendChild(halalStatus);
+
+      wrapper.appendChild(img);
+      wrapper.appendChild(meta);
+
+      return wrapper;
+    }
+
+    function renderGrid(state = 'all', halal = 'all', searchQuery = '') {
+      const grid = el('#grid');
+      grid.innerHTML = '';
+      let filteredData = DATA.filter(d => (state === 'all' || d.state === state) && (halal === 'all' || d.halal === halal));
+      if (searchQuery) {
+        filteredData = filteredData.filter(d =>
+          d.state.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          d.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+      filteredData.forEach(food => grid.appendChild(makeFoodItem(food)));
+    }
+
+    function openModal(food) {
+      el('#modal').style.display = 'flex';
+      el('#modal').setAttribute('aria-hidden', 'false');
+      el('#modal-img').src = food.image || 'images/placeholder.jpg';
+      el('#modal-name').textContent = food.name || '';
+      el('#modal-description').textContent = food.description || 'No description available.';
+      el('#modal-ingredients').textContent = "Ingredients: " + (food.ingredients || 'N/A');
+      el('#modal-halal-status').textContent = `Halal Status: ${food.halal}`;
+    }
+
+    el('#close-modal').onclick = function () {
+      el('#modal').style.display = 'none';
+      el('#modal').setAttribute('aria-hidden', 'true');
+    };
+
+    el('#stateFilter').addEventListener('change', (e) => {
+      const searchQuery = el('#search').value;
+      const halal = el('#halalFilter').value;
+      renderGrid(e.target.value, halal, searchQuery);
+    });
+
+    el('#halalFilter').addEventListener('change', (e) => {
+      const searchQuery = el('#search').value;
+      const state = el('#stateFilter').value;
+      renderGrid(state, e.target.value, searchQuery);
+    });
+
+    el('#search').addEventListener('input', (e) => {
+      const searchQuery = e.target.value;
+      const state = el('#stateFilter').value;
+      const halal = el('#halalFilter').value;
+      renderGrid(state, halal, searchQuery);
+    });
+
+    buildStateOptions();
+    renderGrid();  // Initialize with all states and halal/non-halal
+  </script>
+</body>
+</html>
