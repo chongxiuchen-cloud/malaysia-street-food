@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+  <meta charset="utf-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>East Malaysia</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('EastMalaysia,jpg.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      padding: 20px;
+      min-height: 100vh;
+      animation: fadeIn 1.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+      padding-top: 20px;
+    }
+
+    .hugefont {
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: #1e90ff;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+      animation: slideDown 1s ease-out;
+    }
+
+    @keyframes slideDown {
+      from { 
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      to { 
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #f8f8f8;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      animation: fadeInUp 1s ease-out 0.3s both;
+    }
+
+    @keyframes fadeInUp {
+      from { 
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .food-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+      padding: 20px;
+    }
+
+    .food-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: all 0.4s ease;
+      animation: fadeInScale 1s ease-out;
+      animation-fill-mode: both;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .food-card:nth-child(1) { animation-delay: 0.2s; }
+    .food-card:nth-child(2) { animation-delay: 0.3s; }
+    .food-card:nth-child(3) { animation-delay: 0.4s; }
+    .food-card:nth-child(4) { animation-delay: 0.5s; }
+    .food-card:nth-child(5) { animation-delay: 0.6s; }
+    .food-card:nth-child(6) { animation-delay: 0.7s; }
+    .food-card:nth-child(7) { animation-delay: 0.8s; }
+    .food-card:nth-child(8) { animation-delay: 0.9s; }
+    .food-card:nth-child(9) { animation-delay: 1.0s; }
+    .food-card:nth-child(10) { animation-delay: 1.1s; }
+
+    @keyframes fadeInScale {
+      from { 
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+      }
+      to { 
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .food-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .food-image {
+      width: 100%;
+      height: 250px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .food-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .food-card:hover .food-image img {
+      transform: scale(1.15);
+    }
+
+    .food-name {
+      padding: 20px;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #1e90ff;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .food-info {
+      padding: 15px;
+      text-align: center;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #f0f0f0;
+      display: none;
+    }
+
+    .food-card:hover .food-info {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .rating {
+      color: #ffcc00;
+      margin: 10px 0;
+      font-size: 1.2rem;
+    }
+
+    .floating-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #0066cc, #1e90ff);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 1.5rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      z-index: 100;
+      transition: all 0.3s ease;
+      animation: pulse 2s infinite;
+    }
+
+    .floating-btn:hover {
+      transform: scale(1.1) rotate(180deg);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      padding: 20px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .hugefont {
+        font-size: 2.5rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+      }
+      
+      .food-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hugefont {
+        font-size: 2rem;
+      }
+      
+      .food-name {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1 class="hugefont">TOP 10 MUST TRY FOOD IN EAST MALAYSIA</h1>
+    <p class="subtitle">Discover the unique culinary treasures of East Malaysia</p>
+  </div>
+
+  <div class="food-container">
+    <!-- Sarawak Laksa -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="(1)sarawaklaksa.jpg" alt="sarawaklaksa">
+      </div>
+      <div class="food-name">Sarawak Laksa</div>
+      <div class="food-info">
+        <div class="rating">★★★★★</div>
+        <p>A signature Sarawak noodle soup with a rich, spicy broth made from sambal belacan, sour tamarind, and coconut milk.</p>
+      </div>
+    </div>
+
+    <!-- Kolo Mee -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="(2)KoloMee.jpg" alt="KoloMee">
+      </div>
+      <div class="food-name">Kolo Mee</div>
+      <div class="food-info">
+        <div class="rating">★★★★★</div>
+        <p>Dry noodles tossed in a savory sauce with minced pork, char siu, and spring onions. A Sarawak favorite.</p>
+      </div>
+    </div>
+
+    <!-- Beef Noodle -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="(3)BeefNoodles.jpg" alt="BeefNoodles">
+      </div>
+      <div class="food-name">Beef Noodle</div>
+      <div class="food-info">
+        <div class="rating">★★★★☆</div>
+        <p>Hearty noodles served with tender beef slices, beef balls, and a flavorful broth.</p>
+      </div>
+    </div>
+
+    <!-- Nasi Linopot -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="(4)NasiLinopot.jpg" alt="Linopot">
+      </div>
+      <div class="food-name">Nasi Linopot</div>
+      <div class="food-info">
+        <div class="rating">★★★★☆</div>
+        <p>Traditional Kadazan-Dusun rice wrapped in leaves, often served with grilled fish or chicken.</p>
+      </div>
+    </div>
+
+    <!-- Umai -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="(5)Umai.jpg" alt="Umai">
+      </div>
+      <div class="food-name">Umai</div>
+      <div class="food-info">
+        <div class="rating">★★★★☆</div>
+        <p>A Melanau dish of raw fish marinated in lime juice, onions, chilies, and salt. Similar to ceviche.</p>
+      </div>
+    </div>
+
+    <!-- Pansuh -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="(6)Pansuh.jpg" alt="Pansuh">
+      </div>
+      <div class="food-name">Pansuh</div>
+      <div class="food-info">
+        <div class="rating">★★★★☆</div>
+        <p>Meat (usually chicken) cooked in bamboo with herbs and spices. A traditional Dayak cooking method.</p>
+      </div>
+    </div>
+
+    <!-- Hinava -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="(7)Hinava,jpg.jpg" alt="Hinava">
+      </div>
+      <div class="food-name">Hinava</div>
+      <div class="food-info">
+        <div class="rating">★★★★☆</div>
+        <p>A Kadazan-Dusun dish of raw fish cured in lime juice with ginger, chili, and bitter gourd.</p>
+      </div>
+    </div>
+
+    <!-- Mee Tuaran -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="(8)MeeTuaran.jpg" alt="MeeTuaran">
+      </div>
+      <div class="food-name">Mee Tuaran</div>
+      <div class="food-info">
+        <div class="rating">★★★★☆</div>
+        <p>Freshly made noodles from Tuaran town, stir-fried with eggs, vegetables, and meat.</p>
+      </div>
+    </div>
+
+    <!-- Linopot -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="(9)Linopod.jpg" alt="Linopot">
+      </div>
+      <div class="food-name">Linopot</div>
+      <div class="food-info">
+        <div class="rating">★★★★☆</div>
+        <p>Sticky rice wrapped in leaves, a traditional indigenous food often eaten during festivals.</p>
+      </div>
+    </div>
+
+    <!-- Kek Lapis Sarawak -->
+    <div class="food-card">
+      <div class="food-image">
+        <img src="(10)KekLapisSarawak.jpg" alt="KekLapisSarawak">
+      </div>
+      <div class="food-name">Kek Lapis Sarawak</div>
+      <div class="food-info">
+        <div class="rating">★★★★★</div>
+        <p>Sarawak's famous layered cake with intricate patterns and flavors. A must-try dessert.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <div class="footer">
+    <p>© 2023 East Malaysia Culinary Guide | Experience the Unique Flavors of Borneo</p>
+  </div>
+
+  <script>
+    // 添加滚动效果
+    document.addEventListener('DOMContentLoaded', function() {
+      const foodCards = document.querySelectorAll('.food-card');
+      
+      foodCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          this.style.zIndex = '10';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+          this.style.zIndex = '1';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

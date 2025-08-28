@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #d9b99b, #a67c52);
+            color: #4d2c1d;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+            z-index: -1;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-20px) translateX(10px); }
+            50% { transform: translateY(-40px) translateX(-10px); }
+            75% { transform: translateY(-20px) translateX(-15px); }
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px;
+            background: rgba(255, 248, 240, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(89, 47, 23, 0.3);
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            color: #5e3023;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(94, 48, 35, 0.2);
+        }
+        
+        h2 {
+            color: #8b5e3c;
+            border-bottom: 2px dashed #c08552;
+            padding-bottom: 10px;
+            margin: 25px 0 15px 0;
+        }
+        
+        p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .profile {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+            background: rgba(210, 180, 140, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-right: 25px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(139, 94, 60, 0.3);
+            flex-shrink: 0;
+            background: linear-gradient(45deg, #8b5e3c, #c08552);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0 20px 0;
+        }
+        
+        .social-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #8b5e3c, #c08552);
+            color: white;
+            font-size: 2rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(139, 94, 60, 0.3);
+            overflow: hidden;
+        }
+        
+        .social-btn img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 20px rgba(139, 94, 60, 0.5);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #4d2c1d;
+            font-size: 0.9rem;
+        }
+        
+        .chocolate-bar {
+            height: 10px;
+            background: linear-gradient(to right, #4d2c1d, #8b5e3c, #c08552, #8b5e3c, #4d2c1d);
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .logo-img {
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(139, 94, 60, 0.3);
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .profile {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-img {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+            
+            .social-links {
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background bubbles -->
+    <div class="bubble" style="width: 80px; height: 80px; top: 10%; left: 5%;"></div>
+    <div class="bubble" style="width: 120px; height: 120px; top: 20%; right: 8%;"></div>
+    <div class="bubble" style="width: 60px; height: 60px; bottom: 30%; left: 10%;"></div>
+    <div class="bubble" style="width: 100px; height: 100px; bottom: 20%; right: 12%;"></div>
+    <div class="bubble" style="width: 70px; height: 70px; top: 50%; left: 20%;"></div>
+    <div class="bubble" style="width: 90px; height: 90px; bottom: 10%; left: 50%;"></div>
+    
+    <div class="container">
+        <header>
+            <img src="LOGO.png" width="140" height="140" alt="Eat APA?" class="logo-img">
+            <h1>About Us</h1>
+            <div class="chocolate-bar"></div>
+            <p><b>Explore the food world - Malaysia (U & Me)</b></p>
+        </header>
+        
+        <section>
+            <h2>About Our Teams</h2>
+            <p>Welcome to Eat APA? Team, where we blend creativity with technology to create beautiful, functional websites for more food lover. Our team is passionate about sharing more Malaysian Cuisines to people who interested with it.</p>
+            <p>Founded in 2025, our mission is rooted in a deep love for the vibrant, diverse, and soulful culinary heritage of Malaysia.To bring the authentic flavors of Malaysian cuisine to a global audience. We believe that food is a universal language — a powerful connector that tells stories, preserves culture, and creates community.</p>
+        </section>
+        
+        <section>
+            <h2>Our Web Designer</h2>
+            <div class="profile">
+                <div class="profile-img">
+                    <img src="andrewpic.jpeg" alt="Chong Xiu Chen">
+                </div>
+                <div class="profile-info">
+                    <h3>Chong Xiu Chen</h3>
+                    <p>Cyber Security Developer</p>
+                    <p>Mr Chong is an experienced Cyber Security Developer with over 7 years of experience in building robust, secure systems and applications. With a background in both offensive security and defensive programming, he brings a unique perspective to every project, ensuring that solutions are not only resilient against threats but also highly performant and seamlessly integrated.</p>
+                </div>
+            </div>
+            <div class="profile">
+                <div class="profile-img">
+                    <img src="zongyeepic.jpeg" alt="Khoo Khoo Bird">
+                </div>
+                <div class="profile-info">
+                    <h3>Khoo Zong Yee</h3>
+                    <p>IT Business Marketing & Sales</p>
+                    <p>Mr Khoo is an accomplished IT Business Marketing & Sales specialist with over 6 years of experience in driving growth for technology solutions. With a background in both technical sales and strategic marketing, he brings a unique perspective to every client engagement, ensuring that products are not only effectively promoted but also aligned with market needs and customer pain points, resulting in scalable revenue and long-term partnerships.”</p>
+                </div>
+            </div>
+            <div class="profile">
+                <div class="profile-img">
+                    <img src="jzhenpic.jpeg" alt="Tee Jun Zhen">
+                </div>
+                <div class="profile-info">
+                    <h3>Tee Jun Zhen</h3>
+                    <p>Public Relation & Networking Developer</p>
+                    <p>Mr Tee is an innovative Public Relations & Networking Developer with over 5 years of experience in building robust digital ecosystems. With a background in both software development and strategic communication, he brings a unique perspective to every project, ensuring that API integrations and developer portals are not only technically sound but also foster strong community engagement and brand advocacy.”</p>
+                </div>
+            </div>
+            <div class="profile">
+                <div class="profile-img">
+                    <img src="alan.jpg" alt="LEE XIONG HEI">
+                </div>
+                <div class="profile-info">
+                    <h3>LEE XIONG HEI</h3>
+                    <p>Lead Web Designer & Developer</p>
+                    <p>Mr Lee is an experienced web designer with over 5 years of experience in creating beautiful, responsive websites. With a background in both design and development, he brings a unique perspective to every project, ensuring that websites are not only visually appealing but also highly functional and user-friendly.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Connect With Us</h2>
+            <p>Follow us on social media to stay updated with our latest details!</p>
+            
+            <div class="social-links">
+                <a href="https://www.instagram.com/eat_apa.malaysia?igsh=MTBicGphNzkwb3FpZA==" target="_blank" class="social-btn">
+                    <img src="ig.png" alt="Instagram">
+                </a>
+                <a href="https://www.xiaohongshu.com/user/profile/645e69e0000000000f007eed?xsec_token=YB6hAd1gD6AF4YoymcyfhjUWvQdez4u0j1ZRSJdQHE7bM%3D&xsec_source=app_share&xhsshare=CopyLink&appuid=645e69e0000000000f007eed&apptime=1756055165&share_id=8f3beaa0db434836bbc0161ffa202fd6&share_channel=copy_link" target="_blank" class="social-btn">
+                    <img src="xiaohongshuuu.png" alt="Xiaohongshu">
+                </a>
+                <a href="https://www.tiktok.com/@eat.apa.malaysia?_t=ZS-8z9sGVPA0Zu&_r=1" target="_blank" class="social-btn">
+                    <img src="tiktok-logopng.webp" alt="TikTok">
+                </a>
+            </div>
+        </section>
+        
+        <footer>
+            <div class="chocolate-bar"></div>
+            <p>© 2025 Eat APA?. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Create more bubbles for background
+        document.addEventListener('DOMContentLoaded', function() {
+            const body = document.querySelector('body');
+            const bubbleCount = 15;
+            
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                
+                const size = Math.random() * 80 + 40;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${posX}%`;
+                bubble.style.top = `${posY}%`;
+                
+                // Random animation delay
+                bubble.style.animationDelay = `${Math.random() * 10}s`;
+                
+                body.appendChild(bubble);
+            }
+            
+            // Add interactive effect to social buttons
+            const socialBtns = document.querySelectorAll('.social-btn');
+            socialBtns.forEach(btn => {
+                btn.addEventListener('mouseover', () => {
+                    btn.style.background = 'linear-gradient(45deg, #5e3023, #8b5e3c)';
+                });
+                
+                btn.addEventListener('mouseout', () => {
+                    btn.style.background = 'linear-gradient(45deg, #8b5e3c, #c08552)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

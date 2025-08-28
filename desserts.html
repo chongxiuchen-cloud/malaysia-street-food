@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaysian Desserts & Snacks</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #6d4c41, #5d4037);
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 2rem 0;
+            background-color: rgba(93, 64, 55, 0.8);
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #ffcc80;
+        }
+
+        .page-description {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #efebe9;
+        }
+
+        .section {
+            background-color: rgba(121, 85, 72, 0.9);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            color: #ffcc80;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #ffcc80;
+            font-size: 1.8rem;
+        }
+
+        /* Tabs styling */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            background: rgba(93, 64, 55, 0.8);
+            border-radius: 50px;
+            padding: 0.5rem;
+        }
+
+        .tab-btn {
+            padding: 0.8rem 1.5rem;
+            background: none;
+            border: none;
+            color: #efebe9;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background-color: #ffb300;
+            color: #4e342e;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .food-card {
+            background: rgba(93, 64, 55, 0.8);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            border: 1px solid #8d6e63;
+            position: relative;
+        }
+
+        .food-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .food-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .food-content {
+            padding: 1.2rem;
+        }
+
+        .food-name {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: #ffcc80;
+            margin-bottom: 0.5rem;
+        }
+
+        .food-desc {
+            margin: 0.8rem 0;
+            color: #efebe9;
+            line-height: 1.5;
+        }
+
+        .rating {
+            color: #ffb300;
+            margin: 0.8rem 0;
+            font-size: 1.1rem;
+        }
+
+        .save-btn {
+            background-color: #ffb300;
+            color: #4e342e;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn.saved {
+            background-color: #4caf50;
+        }
+
+        .save-btn:hover {
+            background-color: #ffa000;
+        }
+
+        .save-btn.saved:hover {
+            background-color: #388e3c;
+        }
+
+        .saved-items {
+            background: rgba(121, 85, 72, 0.95);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .saved-title {
+            color: #ffcc80;
+            margin-bottom: 0.8rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        #saved-list {
+            list-style: none;
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 1rem 0;
+        }
+
+        #saved-list li {
+            padding: 0.8rem;
+            border-bottom: 1px solid #8d6e63;
+            color: #efebe9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #saved-list li:last-child {
+            border-bottom: none;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: #ffab91;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .clear-btn {
+            background-color: #d84315;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 0.8rem;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            color: #efebe9;
+            background-color: rgba(93, 64, 55, 0.8);
+            border-radius: 10px;
+        }
+
+        /* ✅ Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ffb300;
+            color: #4e342e;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ✅ Notification popup (center screen) */
+        .notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #333;
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .notification.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 768px) {
+            .food-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-direction: column;
+                border-radius: 10px;
+            }
+
+            .tab-btn {
+                border-radius: 0;
+                text-align: center;
+            }
+
+            .tab-btn:first-child {
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+            }
+
+            .tab-btn:last-child {
+                border-bottom-left-radius: 10px;
+                border-bottom-right-radius: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+            <header>
+                <img src="LOGO.png" width="140" height="140" alt="Logo">
+                <h1>Malaysian Desserts & Snacks</h1>
+                <p class="page-description">Explore the rich variety of traditional Malaysian desserts and street food,
+                    experiencing unique Southeast Asian flavors.</p>
+            </header>
+            <div class="section">
+                <h2 class="section-title">Malaysian Food Selection</h2>
+
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="all">All Items</button>
+                    <button class="tab-btn" data-tab="desserts">Desserts</button>
+                    <button class="tab-btn" data-tab="snacks">Street Snacks</button>
+                </div>
+
+                <div class="tab-content active" id="all-content">
+                    <h3 class="section-title">Traditional Desserts</h3>
+                    <div class="food-grid">
+                        <div class="food-card" data-category="desserts">
+                            <img src="cendol.jpg" alt="Cendol" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Cendol</div>
+                                <p class="food-desc">Shaved ice dessert with green rice flour jelly, coconut milk, and
+                                    palm sugar syrup. Often topped with red beans and sweet corn.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐⭐ 4.8</div>
+                                <button class="save-btn" data-name="Cendol"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card" data-category="desserts">
+                            <img src="kuih.jpg" alt="Kuih" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Kuih</div>
+                                <p class="food-desc">Colorful bite-sized snacks or desserts made from rice flour,
+                                    coconut milk, and various flavorings. Comes in many shapes and textures.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐ 4.5</div>
+                                <button class="save-btn" data-name="Kuih"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card" data-category="desserts">
+                            <img src="aiskacang.jpg" alt="Ais Kacang" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Ais Kacang</div>
+                                <p class="food-desc">Also known as ABC (Air Batu Campur), this dessert features shaved
+                                    ice with red beans, grass jelly, sweet corn, and various syrups.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐⭐ 4.6</div>
+                                <button class="save-btn" data-name="Ais Kacang"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card" data-category="desserts">
+                            <img src="pulutinti.jpg" alt="Pulut Inti" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Pulut Inti</div>
+                                <p class="food-desc">Glutinous rice topped with sweet coconut mixture wrapped in banana
+                                    leaf. A classic Nyonya kuih with perfect balance of savory and sweet.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐ 4.4</div>
+                                <button class="save-btn" data-name="Pulut Inti"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card" data-category="desserts">
+                            <img src="angkukueh.jpg" alt="Sago Gula Melaka" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Ang ku kueh</div>
+                                <p class="food-desc">a small round or oval-shaped Chinese sweet dumpling with soft,
+                                    sticky glutinous rice flour skin wrapped around a sweet central filling.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐ 4.3</div>
+                                <button class="save-btn" data-name="Ang ku kueh"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card" data-category="desserts">
+                            <img src="buburchacha.jpg" alt="Bubur Cha Cha" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Bubur Cha Cha</div>
+                                <p class="food-desc">Colorful yam and sweet potato cubes in coconut milk soup, often
+                                    served warm or chilled. A popular dessert during festive occasions.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐ 4.5</div>
+                                <button class="save-btn" data-name="Bubur Cha Cha"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="section-title">Street Snacks</h3>
+                    <div class="food-grid">
+                        <div class="food-card" data-category="snacks">
+                            <img src="roticanai.jpg" alt="Roti Canai" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Roti Canai</div>
+                                <p class="food-desc">Flaky, flatbread served with dhal (lentil curry) or other sauces. A
+                                    popular breakfast and snack item throughout Malaysia.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐⭐ 4.9</div>
+                                <button class="save-btn" data-name="Roti Canai"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card" data-category="snacks">
+                            <img src="satay.jpg" alt="Satay" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Satay</div>
+                                <p class="food-desc">Skewered and grilled meat served with peanut sauce, cucumber, and
+                                    ketupat (compressed rice cakes).</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐⭐ 4.7</div>
+                                <button class="save-btn" data-name="Satay"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card" data-category="snacks">
+                            <img src="apambalik.jpg" alt="Apam Balik" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Apam Balik</div>
+                                <p class="food-desc">A thick, fluffy pancake filled with sugar, crushed peanuts, and
+                                    sweet corn. Sometimes called Malaysian turnover pancake.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐ 4.6</div>
+                                <button class="save-btn" data-name="Apam Balik"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card" data-category="snacks">
+                            <img src="rojak.png" alt="Rojak" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Rojak</div>
+                                <p class="food-desc">A unique fruit and vegetable salad with a thick, sweet and spicy
+                                    shrimp paste dressing. Topped with crushed peanuts.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐ 4.4</div>
+                                <button class="save-btn" data-name="Rojak"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card" data-category="snacks">
+                            <img src="popiah.jpg" alt="Popiah" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Popiah</div>
+                                <p class="food-desc">Fresh spring rolls filled with turnip, carrots, beansprouts and
+                                    shrimp, served with sweet sauce and crushed peanuts.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐ 4.5</div>
+                                <button class="save-btn" data-name="Popiah"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card" data-category="snacks">
+                            <img src="currypuff.jpg" alt="Curry Puff" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Curry Puff</div>
+                                <p class="food-desc">Flaky pastry filled with spicy potato and chicken curry. A popular
+                                    tea-time snack available at street stalls and bakeries.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐⭐ 4.7</div>
+                                <button class="save-btn" data-name="Curry Puff"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Desserts Tab -->
+                <div class="tab-content" id="desserts-content">
+                    <div class="food-grid">
+                        <div class="food-card">
+                            <img src="cendol.jpg" alt="Cendol" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Cendol</div>
+                                <p class="food-desc">Shaved ice dessert with green rice flour jelly, coconut milk, and
+                                    palm sugar syrup. Often topped with red beans and sweet corn.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐⭐ 4.8</div>
+                                <button class="save-btn" data-name="Cendol"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card">
+                            <img src="kuih.jpg" alt="Kuih" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Kuih</div>
+                                <p class="food-desc">Colorful bite-sized snacks or desserts made from rice flour,
+                                    coconut milk, and various flavorings. Comes in many shapes and textures.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐ 4.5</div>
+                                <button class="save-btn" data-name="Kuih"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card">
+                            <img src="aiskacang.jpg" alt="Ais Kacang" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Ais Kacang</div>
+                                <p class="food-desc">Also known as ABC (Air Batu Campur), this dessert features shaved
+                                    ice with red beans, grass jelly, sweet corn, and various syrups.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐⭐ 4.6</div>
+                                <button class="save-btn" data-name="Ais Kacang"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card">
+                            <img src="pulutinti.jpg" alt="Pulut Inti" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Pulut Inti</div>
+                                <p class="food-desc">Glutinous rice topped with sweet coconut mixture wrapped in banana
+                                    leaf. A classic Nyonya kuih with perfect balance of savory and sweet.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐ 4.4</div>
+                                <button class="save-btn" data-name="Pulut Inti"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card" data-category="desserts">
+                            <img src="angkukueh.jpg" alt="Sago Gula Melaka" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Ang ku kueh</div>
+                                <p class="food-desc">a small round or oval-shaped Chinese sweet dumpling with soft,
+                                    sticky glutinous rice flour skin wrapped around a sweet central filling.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐ 4.3</div>
+                                <button class="save-btn" data-name="Ang ku kueh"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card">
+                            <img src="buburchacha.jpg" alt="Bubur Cha Cha" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Bubur Cha Cha</div>
+                                <p class="food-desc">Colorful yam and sweet potato cubes in coconut milk soup, often
+                                    served warm or chilled. A popular dessert during festive occasions.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐ 4.5</div>
+                                <button class="save-btn" data-name="Bubur Cha Cha"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Snacks Tab -->
+                <div class="tab-content" id="snacks-content">
+                    <div class="food-grid">
+                        <div class="food-card">
+                            <img src="roticanai.jpg" alt="Roti Canai" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Roti Canai</div>
+                                <p class="food-desc">Flaky, flatbread served with dhal (lentil curry) or other sauces. A
+                                    popular breakfast and snack item throughout Malaysia.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐⭐ 4.9</div>
+                                <button class="save-btn" data-name="Roti Canai"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card">
+                            <img src="satay.jpg" alt="Satay" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Satay</div>
+                                <p class="food-desc">Skewered and grilled meat served with peanut sauce, cucumber, and
+                                    ketupat (compressed rice cakes).</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐⭐ 4.7</div>
+                                <button class="save-btn" data-name="Satay"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card">
+                            <img src="apambalik.jpg" alt="Apam Balik" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Apam Balik</div>
+                                <p class="food-desc">A thick, fluffy pancake filled with sugar, crushed peanuts, and
+                                    sweet corn. Sometimes called Malaysian turnover pancake.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐ 4.6</div>
+                                <button class="save-btn" data-name="Apam Balik"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card">
+                            <img src="rojak.png" alt="Rojak" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Rojak</div>
+                                <p class="food-desc">A unique fruit and vegetable salad with a thick, sweet and spicy
+                                    shrimp paste dressing. Topped with crushed peanuts.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐ 4.4</div>
+                                <button class="save-btn" data-name="Rojak"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card">
+                            <img src="popiah.jpg" alt="Popiah" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Popiah</div>
+                                <p class="food-desc">Fresh spring rolls filled with turnip, carrots, beansprouts and
+                                    shrimp, served with sweet sauce and crushed peanuts.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐ 4.5</div>
+                                <button class="save-btn" data-name="Popiah"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+
+                        <div class="food-card">
+                            <img src="currypuff.jpg" alt="Curry Puff" class="food-image">
+                            <div class="food-content">
+                                <div class="food-name">Curry Puff</div>
+                                <p class="food-desc">Flaky pastry filled with spicy potato and chicken curry. A popular
+                                    tea-time snack available at street stalls and bakeries.</p>
+                                <div class="rating">Rating: ⭐⭐⭐⭐⭐ 4.7</div>
+                                <button class="save-btn" data-name="Curry Puff"><i class="fas fa-heart"></i> Add to
+                                    Favorites</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="saved-items">
+                <h3 class="saved-title"><i class="fas fa-heart"></i> My Favorites</h3>
+                <ul id="saved-list">
+                    <li>No favorites yet</li>
+                </ul>
+                <button class="clear-btn" id="clear-btn">Clear All Favorites</button>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Cultural Context</h2>
+                <p>Malaysian desserts and snacks reflect the country's diverse cultural heritage, with influences from
+                    Malay, Chinese, and Indian traditions. Many desserts are based on rice, coconut, and palm sugar -
+                    ingredients abundant in the region.</p>
+                <p>Street food culture is an integral part of Malaysian life, with night markets (pasar malam) offering
+                    a wide variety of affordable snacks and sweets. Sharing food is an important social activity, and
+                    many desserts are associated with specific festivals and celebrations.</p>
+            </div>
+
+            <footer>
+                <p>© 2025 Eat APA?. All Rights Reserved.</p>
+            </footer>
+
+            <!-- ✅ Back-to-Top Button -->
+            <div id="backToTop" class="back-to-top"><i class="fas fa-arrow-up"></i></div>
+
+            <!-- ✅ Notification -->
+            <div id="notification" class="notification">
+                <span id="notification-text"></span>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const saveButtons = document.querySelectorAll('.save-btn');
+                    const savedList = document.getElementById('saved-list');
+                    const clearBtn = document.getElementById('clear-btn');
+                    const tabBtns = document.querySelectorAll('.tab-btn');
+                    const backToTopBtn = document.getElementById('backToTop');
+                    const notification = document.getElementById('notification');
+                    const notificationText = document.getElementById('notification-text');
+
+                    let savedItems = JSON.parse(localStorage.getItem('savedFoods')) || [];
+                    updateSavedList();
+                    updateButtonStates();
+
+                    // Tabs
+                    tabBtns.forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            tabBtns.forEach(b => b.classList.remove('active'));
+                            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                            btn.classList.add('active');
+                            document.getElementById(`${btn.getAttribute('data-tab')}-content`).classList.add('active');
+                        });
+                    });
+
+                    // Save favorites
+                    saveButtons.forEach(button => {
+                        button.addEventListener('click', function () {
+                            const foodName = this.getAttribute('data-name');
+                            if (savedItems.includes(foodName)) {
+                                savedItems = savedItems.filter(item => item !== foodName);
+                                showNotification(`${foodName} removed from favorites`);
+                            } else {
+                                savedItems.push(foodName);
+                                showNotification(`${foodName} added to favorites`);
+                            }
+                            localStorage.setItem('savedFoods', JSON.stringify(savedItems));
+                            updateSavedList();
+                            updateButtonStates();
+                        });
+                    });
+
+                    // Clear favorites
+                    clearBtn.addEventListener('click', function () {
+                        savedItems = [];
+                        localStorage.setItem('savedFoods', JSON.stringify(savedItems));
+                        updateSavedList();
+                        updateButtonStates();
+                        showNotification("All favorites cleared");
+                    });
+
+                    // Update saved list
+                    function updateSavedList() {
+                        if (savedItems.length > 0) {
+                            savedList.innerHTML = '';
+                            savedItems.forEach(item => {
+                                const li = document.createElement('li');
+                                li.innerHTML = `${item} <button class="remove-btn" data-name="${item}"><i class="fas fa-times"></i></button>`;
+                                savedList.appendChild(li);
+                            });
+                            document.querySelectorAll('.remove-btn').forEach(btn => {
+                                btn.addEventListener('click', function () {
+                                    const itemName = this.getAttribute('data-name');
+                                    savedItems = savedItems.filter(item => item !== itemName);
+                                    localStorage.setItem('savedFoods', JSON.stringify(savedItems));
+                                    updateSavedList();
+                                    updateButtonStates();
+                                    showNotification(`${itemName} removed`);
+                                });
+                            });
+                        } else {
+                            savedList.innerHTML = '<li>No favorites yet</li>';
+                        }
+                    }
+
+                    // Update button states
+                    function updateButtonStates() {
+                        saveButtons.forEach(button => {
+                            const foodName = button.getAttribute('data-name');
+                            if (savedItems.includes(foodName)) {
+                                button.innerHTML = '<i class="fas fa-check"></i> Remove from Favorites';
+                                button.classList.add('saved');
+                            } else {
+                                button.innerHTML = '<i class="fas fa-heart"></i> Add to Favorites';
+                                button.classList.remove('saved');
+                            }
+                        });
+                    }
+
+                    // ✅ Show notification
+                    function showNotification(message) {
+                        notificationText.textContent = message;
+                        notification.classList.add('show');
+                        setTimeout(() => notification.classList.remove('show'), 2000);
+                    }
+
+                    // ✅ Back to top
+                    window.addEventListener('scroll', () => {
+                        if (window.pageYOffset > 300) {
+                            backToTopBtn.classList.add('visible');
+                        } else {
+                            backToTopBtn.classList.remove('visible');
+                        }
+                    });
+
+                    backToTopBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                });
+            </script>
+        </body>
+
+        </html>
